@@ -1,0 +1,20 @@
+.form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -110px 0 0 -160px;
+  width: 320px;
+  height: 220px;
+  padding: 36px;
+  box-shadow: 0 0 100px rgba(0,0,0,.08);
+}
+
+.form button {
+  width: 100%;
+}
+
+.form p {
+  color: rgb(204, 0, 0);
+  text-align: center;
+  margin-top: 8px;
+}

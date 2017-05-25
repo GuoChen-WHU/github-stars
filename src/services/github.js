@@ -29,3 +29,12 @@ export async function fetchStars(username, page) {
     maxPage
   };
 }
+
+export async function fetchUser(username, password) {
+  return await fetch('https://api.github.com/user', { 
+    headers: { 
+      Authorization: `Basic ${btoa(`${username}:${password}`)}`
+    }
+  })
+    .then(res => res.json());
+}

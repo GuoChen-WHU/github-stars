@@ -17,8 +17,9 @@ export default {
     }
   },
   effects: {
-    *fetch({ payload: { page } }, { put, call }) {
-      const { list, maxPage } = yield call(githubService.fetchStars, 'GuoChen-WHU', page);
+    *fetch({ payload: { page } }, { select, put, call }) {
+      const { username } = yield select(state => state.user);
+      const { list, maxPage } = yield call(githubService.fetchStars, username, page);
       if (maxPage) yield put({ type: 'saveMaxPage', payload: { maxPage } });
       yield put({ 
         type: 'save', 
