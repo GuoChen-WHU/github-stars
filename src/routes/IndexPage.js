@@ -14,6 +14,11 @@ class IndexPage extends Component {
       dispatch(routerRedux.push({
         pathname: '/login'
       }));
+    } else {
+      dispatch(routerRedux.push({
+        pathname: '/',
+        query: { page: 1 }
+      }));
     }
   }
 

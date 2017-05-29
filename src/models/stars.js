@@ -33,8 +33,8 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/') {
-          dispatch(actions.fetchStars(query && parseInt(query.page) || 1));
+        if (pathname === '/' && query.page) {
+          dispatch(actions.fetchStars(parseInt(query.page) || 1));
         }
       });
     }
