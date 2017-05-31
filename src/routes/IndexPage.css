@@ -1,12 +1,7 @@
-
-.normal {
+.logo {
+  margin: 16px;
   font-family: Georgia, sans-serif;
-  margin-top: 3em;
+  font-size: 1.8em;
+  color: #fff;
   text-align: center;
-}
-
-.title {
-  font-size: 2.5rem;
-  font-weight: normal;
-  letter-spacing: -1px;
 }
