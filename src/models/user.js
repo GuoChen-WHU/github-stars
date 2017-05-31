@@ -14,7 +14,7 @@ export default {
     }
   },
   effects: {
-    *login ({ payload: { username, password }}, { put }) {
+    *login ({ payload: { username, password }}, { put, select }) {
       const userInfo = yield githubService.fetchUser(username, password);
       if (userInfo.message) {
         yield put({
@@ -26,6 +26,8 @@ export default {
           type: 'login/success',
           payload: { username, password, userInfo }
         });
+        const userState = yield select(state => state.user);
+        localStorage.setItem('github-stars-user', JSON.stringify(userState));
       }
     }
   },

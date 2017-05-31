@@ -7,8 +7,8 @@ function getMaxPage(links) {
 }
 
 function selectStar(star) {
-  const { id, full_name, description } = star;
-  return { id, name: full_name, description };
+  const { id, full_name, description, html_url } = star;
+  return { id, name: full_name, description, html_url };
 }
 
 export async function fetchStars(username, page) {

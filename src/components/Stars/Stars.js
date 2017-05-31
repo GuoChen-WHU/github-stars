@@ -12,7 +12,7 @@ function Stars({ dispatch, list: dataSource, page, maxPage }) {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: text => <a href="">{text}</a>
+      render: (text, record) => <a href={record.html_url} target="_blank">{text}</a>
     },
     {
       title: 'Description',

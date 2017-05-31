@@ -1,7 +1,11 @@
 import dva from 'dva';
 import './index.css';
 
-const app = dva();
+const userState = JSON.parse(localStorage.getItem('github-stars-user')) || {};
+
+const app = dva({
+  initialState: { user: userState }
+});
 
 app.model(require("./models/stars"));
 
