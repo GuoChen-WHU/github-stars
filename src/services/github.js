@@ -1,5 +1,6 @@
 import fetch from 'dva/fetch';
 import { PAGE_SIZE } from '../constants';
+import { getTimeAgo } from '../utils';
 
 function getMaxPage(links) {
   const matches = links.match(/page=(\d+)>; rel="last"/);
@@ -7,8 +8,29 @@ function getMaxPage(links) {
 }
 
 function selectStar(star) {
-  const { id, full_name, description, html_url } = star;
-  return { id, name: full_name, description, html_url };
+  const { 
+    id, 
+    full_name, 
+    description, 
+    html_url, 
+    owner,
+    language,
+    stargazers_count,
+    forks_count,
+    pushed_at
+  } = star;
+  return { 
+    id, 
+    name: full_name, 
+    description, 
+    html_url,
+    owner_avatar: owner.avatar_url,
+    owner_url: owner.html_url,
+    language,
+    stargazers_count,
+    forks_count,
+    updated_at: getTimeAgo(pushed_at) + ' ago'
+  };
 }
 
 export async function fetchStars(username, page) {

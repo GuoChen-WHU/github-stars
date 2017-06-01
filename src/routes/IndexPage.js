@@ -26,10 +26,13 @@ class IndexPage extends Component {
   }
 
   render() {
+    const { login, avatar_url } = this.props.userInfo;
     return (
       <Layout>
         <Sider>
           <h1 className={styles.logo}>Github Stars</h1>
+          <img className={styles.avatar} src={avatar_url} alt="Avatar" />
+          <h3 className={styles.username}>{login}</h3>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1">
               <span>
@@ -68,11 +71,13 @@ class IndexPage extends Component {
 }
 
 IndexPage.propTypes = {
-  login: PropTypes.bool
+  login: PropTypes.bool,
+  userInfo: PropTypes.object
 };
 
 const mapStateToProps = state => ({
-  login: state.user.login
+  login: state.user.login,
+  userInfo: state.user.userInfo
 });
 
 export default connect(mapStateToProps)(IndexPage);
