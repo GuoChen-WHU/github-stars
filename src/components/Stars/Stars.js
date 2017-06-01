@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Table, Pagination, Icon } from 'antd';
+import { Table, Pagination, Icon, Popconfirm, Button } from 'antd';
 import { routerRedux } from 'dva/router';
 import { PAGE_SIZE } from '../../constants';
 import styles from './Stars.css';
@@ -12,10 +12,11 @@ function Stars({ dispatch, list: dataSource, page, maxPage }) {
       title: 'Owner',
       dataIndex: 'owner_avatar',
       key: 'avatar',
-      render: (avatar, record) => 
+      render: (avatar, record) => (
         <a href={record.owner_url} target="_blank">
           <img src={avatar} alt="owner" width="32px" height="32px" />
         </a>
+      )
     },
     {
       title: 'Name',
@@ -44,15 +45,53 @@ function Stars({ dispatch, list: dataSource, page, maxPage }) {
       title: 'Updated at',
       dataIndex: 'updated_at',
       key: 'updated_at'
+    },
+    {
+      title: '',
+      dataIndex: '',
+      key: 'action',
+      render: (text, record) => (
+        <span>
+          <Button 
+            type="primary" 
+            icon="book" 
+            onClick={achiveHandler.bind(null, record.id)}
+            style={{marginRight: 8}}
+          >
+            Achive
+          </Button>
+          <Popconfirm 
+            title="Confirm to unstar?" 
+            onConfirm={unstarHandler.bind(null, record.name)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button icon="star">Unstar</Button>
+          </Popconfirm>
+        </span>
+      )
     }
   ];
+
+  const achiveHandler = id => {
+    // TODO
+  };
+
+  const unstarHandler = name => {
+    dispatch({
+      type: 'stars/unstar',
+      payload: {
+        name
+      }
+    });
+  };
 
   const onPageChange = page => {
     dispatch(routerRedux.push({
       pathname: '/',
       query: { page }
     }));
-  }
+  };
 
   return (
     <div className={styles.normal}>

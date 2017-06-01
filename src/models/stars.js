@@ -28,6 +28,12 @@ export default {
           page
         }
       });
+    },
+    *unstar({ payload: { name: repo } }, { put, select, call }) {
+      const { username, password } = yield select(state => state.user);
+      const { page } = yield select(state => state.stars);
+      const res = yield call(githubService.unstar, username, password, repo);
+      yield put(actions.fetchStars(page));
     }
   },
   subscriptions: {

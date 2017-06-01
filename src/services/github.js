@@ -60,3 +60,12 @@ export async function fetchUser(username, password) {
   })
     .then(res => res.json());
 }
+
+export async function unstar(username, password, repo) {
+  return await fetch(`https://api.github.com/user/starred/${repo}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Basic ${btoa(`${username}:${password}`)}`
+    }
+  });
+}
