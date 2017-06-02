@@ -1,11 +1,10 @@
 import React from 'react';
-import { connect } from 'dva';
+import { PropTypes } from 'prop-types';
 import { Table, Pagination, Icon, Popconfirm, Button } from 'antd';
-import { routerRedux } from 'dva/router';
 import { PAGE_SIZE } from '../../constants';
 import styles from './Stars.css';
 
-function Stars({ dispatch, list: dataSource, page, maxPage }) {
+function Stars({ list: dataSource, page, maxPage, actions }) {
 
   const columns = [
     {
@@ -55,7 +54,7 @@ function Stars({ dispatch, list: dataSource, page, maxPage }) {
           <Button 
             type="primary" 
             icon="book" 
-            onClick={achiveHandler.bind(null, record.id)}
+            onClick={achiveHandler.bind(null, record.name)}
             style={{marginRight: 8}}
           >
             Achive
@@ -73,24 +72,19 @@ function Stars({ dispatch, list: dataSource, page, maxPage }) {
     }
   ];
 
-  const achiveHandler = id => {
-    // TODO
+  const achiveHandler = name => {
+    actions.startArchiveEdit(name);
   };
 
   const unstarHandler = name => {
-    dispatch({
-      type: 'stars/unstar',
-      payload: {
-        name
-      }
-    });
+    actions.unstar(name);
   };
 
   const onPageChange = page => {
-    dispatch(routerRedux.push({
+    actions.navigate({
       pathname: '/',
       query: { page }
-    }));
+    });
   };
 
   return (
@@ -113,10 +107,11 @@ function Stars({ dispatch, list: dataSource, page, maxPage }) {
   );
 }
 
-const mapStateToProps = state => ({
-  list: state.stars.list,
-  page: state.stars.page,
-  maxPage: state.stars.maxPage
-});
+Stars.propTypes = {
+  list: PropTypes.array,
+  page: PropTypes.number,
+  maxPage: PropTypes.number,
+  actions: PropTypes.object
+};
 
-export default connect(mapStateToProps)(Stars);
+export default Stars;

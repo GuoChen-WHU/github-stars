@@ -8,8 +8,8 @@ const app = dva({
 });
 
 app.model(require("./models/stars"));
-
 app.model(require("./models/user"));
+app.model(require("./models/archive"));
 
 app.router(require('./router'));
 

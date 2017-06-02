@@ -1,54 +1,49 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router'; 
-import { Layout, Menu, Breadcrumb, Icon } from 'antd';
+import { bindActionCreators } from 'redux';
+
+import { Layout, Breadcrumb } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
-const SubMenu = Menu.SubMenu;
 import styles from './IndexPage.css';
 
+import Sidebar from '../components/Sidebar/Sidebar';
 import Stars from '../components/Stars/Stars';
+import ArchiveModal from '../components/Archive/Modal';
+
+import * as actions from '../actions';
 
 class IndexPage extends Component {
 
   componentWillMount() {
-    const { login, dispatch } = this.props;
+    const { login, actions } = this.props;
     if (!login) {
-      dispatch(routerRedux.push({
+      actions.navigate({
         pathname: '/login'
-      }));
+      });
     } else {
-      dispatch(routerRedux.push({
+      actions.navigate({
         pathname: '/',
         query: { page: 1 }
-      }));
+      });
     }
   }
 
   render() {
     const { login, avatar_url } = this.props.userInfo;
+    const { allArchives, editing, repo } = this.props.archive;
+    const {
+      navigate,
+      unstar,
+      startArchiveEdit, 
+      endArchiveEdit, 
+      addToArchive 
+    } = this.props.actions;
+
     return (
       <Layout>
         <Sider>
-          <h1 className={styles.logo}>Github Stars</h1>
-          <img className={styles.avatar} src={avatar_url} alt="Avatar" />
-          <h3 className={styles.username}>{login}</h3>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1">
-              <span>
-                <Icon type="star" />
-                <span className="nav-text">Stars</span>
-              </span>
-            </Menu.Item>
-            <SubMenu
-              key="sub1"
-              title={<span><Icon type="switcher" /><span className="nav-text">Archive</span></span>}
-            >
-              <Menu.Item key="2">Archive 1</Menu.Item>
-              <Menu.Item key="3">Archive 2</Menu.Item>
-              <Menu.Item key="4">Archive 3</Menu.Item>
-            </SubMenu>
-          </Menu>
+          <Sidebar avatar_url={avatar_url} login={login} archives={allArchives} />
         </Sider>
         <Layout>
           <Header style={{ background: '#fff' }} />
@@ -58,13 +53,22 @@ class IndexPage extends Component {
               <Breadcrumb.Item>List</Breadcrumb.Item>
             </Breadcrumb>
             <div style={{ padding: 24, paddingBottom: 60, background: '#fff', minHeight: 360 }}>
-              <Stars />
+              <Stars 
+                {...this.props.stars}
+                actions={{navigate, unstar, startArchiveEdit}}
+              />
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>
             Github Stars ©2016 Created by Guo Chen
           </Footer>
         </Layout>
+        <ArchiveModal 
+          editing={editing} 
+          archives={allArchives} 
+          repo={repo}
+          actions={{endArchiveEdit, addToArchive}}
+        />
       </Layout>
     );
   }
@@ -72,12 +76,24 @@ class IndexPage extends Component {
 
 IndexPage.propTypes = {
   login: PropTypes.bool,
-  userInfo: PropTypes.object
+  userInfo: PropTypes.object,
+  archive: PropTypes.object,
+  stars: PropTypes.object,
+  actions: PropTypes.object
 };
 
 const mapStateToProps = state => ({
   login: state.user.login,
-  userInfo: state.user.userInfo
+  userInfo: state.user.userInfo,
+  archive: state.archive,
+  stars: state.stars
 });
 
-export default connect(mapStateToProps)(IndexPage);
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(IndexPage);
