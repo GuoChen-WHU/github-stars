@@ -2,11 +2,6 @@ import fetch from 'dva/fetch';
 import { PAGE_SIZE } from '../constants';
 import { getTimeAgo } from '../utils';
 
-function getMaxPage(links) {
-  const matches = links.match(/page=(\d+)>; rel="last"/);
-  return matches && parseInt(matches[1]) || 1;
-}
-
 function selectRepo(info) {
   const { 
     id, 
@@ -34,22 +29,22 @@ function selectRepo(info) {
 }
 
 export async function fetchStars(username, page) {
-  const res = await fetch(`https://api.github.com/users/${username}/starred?per_page=${PAGE_SIZE}&page=${page}`);
-  
-  // Get the last page index from link header in the response,
-  // So that we can set the total page in Stars pagination component properly
-  let maxPage;
-  if (page === 1) {
-    const links = res.headers.get('Link');
-    maxPage = getMaxPage(links);
-  }
-  const data = await res.json();
-  const list = data.map(selectRepo);
+  return await fetch(`https://api.github.com/users/${username}/starred?per_page=${PAGE_SIZE}&page=${page}`)
+    .then(res => res.json())
+    .then(res => res.map(selectRepo));
+}
 
-  return {
-    list,
-    maxPage
-  };
+export async function fetchStarsCount(username) {
+  const res = await fetch(`https://api.github.com/users/${username}/starred?per_page=1`);
+  return getStarsCount(res);
+}
+
+async function getStarsCount(res) {
+  const links = res.headers.get('Link');
+  const matches = links.match(/page=(\d+)>; rel="last"/);
+  if (matches && matches[1]) return parseInt(matches[1]);
+  const list = await res.json();
+  return list.length;
 }
 
 export async function fetchUser(username, password) {

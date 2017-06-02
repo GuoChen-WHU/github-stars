@@ -4,7 +4,7 @@ import { Table, Pagination, Icon, Popconfirm, Button } from 'antd';
 import { PAGE_SIZE } from '../../constants';
 import styles from './Stars.css';
 
-function Stars({ list: dataSource, page, maxPage, actions }) {
+const Stars = ({ list: dataSource, page, total, actions }) => {
 
   const columns = [
     {
@@ -98,7 +98,7 @@ function Stars({ list: dataSource, page, maxPage, actions }) {
       />
       <Pagination
         className="ant-table-pagination"
-        total={maxPage * PAGE_SIZE}
+        total={total}
         current={page}
         pageSize={PAGE_SIZE}
         onChange={onPageChange}
