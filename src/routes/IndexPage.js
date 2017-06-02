@@ -60,7 +60,8 @@ class IndexPage extends Component {
 IndexPage.propTypes = {
   login: PropTypes.bool,
   userInfo: PropTypes.object,
-  archives: PropTypes.array
+  archives: PropTypes.array,
+  actions: PropTypes.object
 };
 
 const mapStateToProps = state => ({

@@ -4,7 +4,7 @@ import { Table, Pagination, Icon, Popconfirm, Button } from 'antd';
 import { PAGE_SIZE } from '../../constants';
 import styles from './Stars.css';
 
-const Stars = ({ list: dataSource, page, total, actions }) => {
+const Stars = ({ list: dataSource, page, total, actions, editable, basePath }) => {
 
   const columns = [
     {
@@ -44,24 +44,27 @@ const Stars = ({ list: dataSource, page, total, actions }) => {
       title: 'Updated at',
       dataIndex: 'updated_at',
       key: 'updated_at'
-    },
-    {
+    }
+  ];
+
+  if (editable) {
+    columns.push({
       title: '',
-      dataIndex: '',
+      dataIndex: 'name',
       key: 'action',
-      render: (text, record) => (
+      render: name => (
         <span>
           <Button 
             type="primary" 
             icon="book" 
-            onClick={achiveHandler.bind(null, record.name)}
+            onClick={achiveHandler.bind(null, name)}
             style={{marginRight: 8}}
           >
             Achive
           </Button>
           <Popconfirm 
             title="Confirm to unstar?" 
-            onConfirm={unstarHandler.bind(null, record.name)}
+            onConfirm={unstarHandler.bind(null, name)}
             okText="Yes"
             cancelText="No"
           >
@@ -69,8 +72,8 @@ const Stars = ({ list: dataSource, page, total, actions }) => {
           </Popconfirm>
         </span>
       )
-    }
-  ];
+    });
+  }
 
   const achiveHandler = name => {
     actions.startArchiveEdit(name);
@@ -82,7 +85,7 @@ const Stars = ({ list: dataSource, page, total, actions }) => {
 
   const onPageChange = page => {
     actions.navigate({
-      pathname: '/stars',
+      pathname: basePath,
       query: { page }
     });
   };
@@ -110,8 +113,10 @@ const Stars = ({ list: dataSource, page, total, actions }) => {
 Stars.propTypes = {
   list: PropTypes.array,
   page: PropTypes.number,
-  maxPage: PropTypes.number,
-  actions: PropTypes.object
+  total: PropTypes.number,
+  actions: PropTypes.object,
+  editable: PropTypes.bool,
+  basePath: PropTypes.string
 };
 
 export default Stars;

@@ -22,7 +22,7 @@ const Sidebar = ({ avatar_url, login, archives}) => {
           key="sub1"
           title={<span><Icon type="switcher" /><span className="nav-text">Archive</span></span>}
         >
-          {archives.map(archive => <Menu.Item key={archive}><Link to={`/archive/${archive}`}>{archive}</Link></Menu.Item>)}
+          {archives.map(archive => <Menu.Item key={archive}><Link to={`/archive/${archive}?page=1`}>{archive}</Link></Menu.Item>)}
         </SubMenu>
       </Menu>
     </div>

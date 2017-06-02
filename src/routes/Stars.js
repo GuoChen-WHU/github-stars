@@ -23,6 +23,8 @@ class Stars extends Component {
         <StarsComponent 
           {...this.props.stars}
           actions={{navigate, unstar, startArchiveEdit}}
+          editable={true}
+          basePath={'/stars'}
         />
         <ArchiveModal 
           editing={editing} 
