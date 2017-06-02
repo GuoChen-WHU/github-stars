@@ -1,4 +1,3 @@
-import * as actions from '../actions';
 import { fetchRepo } from '../services/github';
 
 export default {
@@ -45,7 +44,12 @@ export default {
       return history.listen(({ pathname }) => {
         const paths = pathname.split('/');
         if (paths[1] === 'archive') {
-          dispatch(actions.fetchArchive(paths[2]));
+          dispatch({
+            type: 'fetch', 
+            payload: {
+              name: paths[2]
+            }
+          });
         }
       });
     }

@@ -1,5 +1,4 @@
 import * as githubService from '../services/github';
-import * as actions from '../actions';
 
 export default {
   namespace: 'stars',
@@ -53,7 +52,7 @@ export default {
             total: total - 1 
           }
         });
-        yield put(actions.fetchStars(page));
+        yield put({ type: 'fetch', payload: { page } });
       }
     }
   },
@@ -61,7 +60,12 @@ export default {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/stars' && query.page) {
-          dispatch(actions.fetchStars(parseInt(query.page) || 1));
+          dispatch({ 
+            type: 'fetch', 
+            payload: { 
+              page: parseInt(query.page) || 1 
+            } 
+          });
         }
       });
     }
