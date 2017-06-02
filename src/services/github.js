@@ -7,7 +7,7 @@ function getMaxPage(links) {
   return matches && parseInt(matches[1]) || 1;
 }
 
-function selectStar(star) {
+function selectRepo(info) {
   const { 
     id, 
     full_name, 
@@ -18,7 +18,7 @@ function selectStar(star) {
     stargazers_count,
     forks_count,
     pushed_at
-  } = star;
+  } = info;
   return { 
     id, 
     name: full_name, 
@@ -44,7 +44,7 @@ export async function fetchStars(username, page) {
     maxPage = getMaxPage(links);
   }
   const data = await res.json();
-  const list = data.map(selectStar);
+  const list = data.map(selectRepo);
 
   return {
     list,
@@ -68,4 +68,10 @@ export async function unstar(username, password, repo) {
       Authorization: `Basic ${btoa(`${username}:${password}`)}`
     }
   });
+}
+
+export async function fetchRepo(name) {
+  return await fetch(`https://api.github.com/repos/${name}`)
+    .then(res => res.json())
+    .then(res => selectRepo(res));
 }

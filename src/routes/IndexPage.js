@@ -8,8 +8,6 @@ const { Header, Content, Footer, Sider } = Layout;
 import styles from './IndexPage.css';
 
 import Sidebar from '../components/Sidebar/Sidebar';
-import Stars from '../components/Stars/Stars';
-import ArchiveModal from '../components/Archive/Modal';
 
 import * as actions from '../actions';
 
@@ -23,52 +21,37 @@ class IndexPage extends Component {
       });
     } else {
       actions.navigate({
-        pathname: '/',
+        pathname: '/stars',
         query: { page: 1 }
       });
     }
   }
 
   render() {
-    const { login, avatar_url } = this.props.userInfo;
-    const { allArchives, editing, repo } = this.props.archive;
-    const {
-      navigate,
-      unstar,
-      startArchiveEdit, 
-      endArchiveEdit, 
-      addToArchive 
-    } = this.props.actions;
+    const { login: username, avatar_url } = this.props.userInfo;
+    const allArchives = this.props.archives;
+    const pathname = this.props.location.pathname;
+    const paths = pathname.split('/');
 
     return (
       <Layout>
         <Sider>
-          <Sidebar avatar_url={avatar_url} login={login} archives={allArchives} />
+          <Sidebar avatar_url={avatar_url} login={username} archives={allArchives} />
         </Sider>
         <Layout>
-          <Header style={{ background: '#fff' }} />
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '12px 0' }}>
-              <Breadcrumb.Item>Stars</Breadcrumb.Item>
-              <Breadcrumb.Item>List</Breadcrumb.Item>
+          <Header className={styles.header} />
+          <Content className={styles.content}>
+            <Breadcrumb className={styles.breadcrumb}>
+              {paths.map(path => <Breadcrumb.Item key={path}>{path.replace(/^\w/, s => s.toUpperCase())}</Breadcrumb.Item>)}
             </Breadcrumb>
-            <div style={{ padding: 24, paddingBottom: 60, background: '#fff', minHeight: 360 }}>
-              <Stars 
-                {...this.props.stars}
-                actions={{navigate, unstar, startArchiveEdit}}
-              />
+            <div className={styles['inner-content']}>
+              {this.props.children}
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
+          <Footer className={styles.footer}>
             Github Stars ©2016 Created by Guo Chen
           </Footer>
         </Layout>
-        <ArchiveModal 
-          editing={editing} 
-          archives={allArchives} 
-          repo={repo}
-          actions={{endArchiveEdit, addToArchive}}
-        />
       </Layout>
     );
   }
@@ -77,16 +60,13 @@ class IndexPage extends Component {
 IndexPage.propTypes = {
   login: PropTypes.bool,
   userInfo: PropTypes.object,
-  archive: PropTypes.object,
-  stars: PropTypes.object,
-  actions: PropTypes.object
+  archives: PropTypes.array
 };
 
 const mapStateToProps = state => ({
   login: state.user.login,
   userInfo: state.user.userInfo,
-  archive: state.archive,
-  stars: state.stars
+  archives: state.archive.allArchives
 });
 
 const mapDispatchToProps = dispatch => ({

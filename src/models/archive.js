@@ -1,3 +1,5 @@
+import * as actions from '../actions';
+import { fetchRepo } from '../services/github';
 
 export default {
   namespace: 'archive',
@@ -14,9 +16,38 @@ export default {
     add(state, { payload: { repo, archive } }) {
       if (!state[archive]) return {...state, [archive]: [repo]};
       const newArchive = [...state[archive], repo];
-      return Object.assign({}, state, {[archive]: newArchive}); 
+      return {...state, [archive]: newArchive}; 
+    },
+    save(state, { payload: { name, list } }) {
+      return {...state, [name + 'list']: list};
     }
   },
-  effects: {},
-  subscriptions: {},
+  effects: {
+    *fetch({ payload: { name }}, { put, call, select }) {
+      const repos = yield select(state => state.archive[name]);
+      if (!repos) return;
+      let list = [];
+      for (let i = 0, len = repos.length; i < len; i++) {
+        let res = yield fetchRepo(repos[i]);
+        list.push(res);  
+      }
+      yield put({
+        type: 'save',
+        payload: {
+          name,
+          list
+        }
+      });
+    }
+  },
+  subscriptions: {
+    update({ dispatch, history }) {
+      return history.listen(({ pathname }) => {
+        const paths = pathname.split('/');
+        if (paths[1] === 'archive') {
+          dispatch(actions.fetchArchive(paths[2]));
+        }
+      });
+    }
+  },
 };

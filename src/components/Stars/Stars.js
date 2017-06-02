@@ -82,7 +82,7 @@ function Stars({ list: dataSource, page, maxPage, actions }) {
 
   const onPageChange = page => {
     actions.navigate({
-      pathname: '/',
+      pathname: '/stars',
       query: { page }
     });
   };

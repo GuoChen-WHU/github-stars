@@ -20,3 +20,5 @@ export const addToArchive = createAction('archive/add', (repo, archive) => ({
   repo,
   archive
 }));
+
+export const fetchArchive = createAction('archive/fetch', name => ({ name }));

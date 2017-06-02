@@ -39,7 +39,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
-        if (pathname === '/' && query.page) {
+        if (pathname === '/stars' && query.page) {
           dispatch(actions.fetchStars(parseInt(query.page) || 1));
         }
       });
