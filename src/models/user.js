@@ -26,8 +26,6 @@ export default {
           type: 'login/success',
           payload: { username, password, userInfo }
         });
-        const userState = yield select(state => state.user);
-        localStorage.setItem('github-stars-user', JSON.stringify(userState));
       }
     }
   },

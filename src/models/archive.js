@@ -4,9 +4,8 @@ import { PAGE_SIZE } from '../constants';
 export default {
   namespace: 'archive',
   state: {
-    allArchives: ['archive1', 'archive2'],
-    archive1: [],
-    archive2: []
+    allArchives: ['default'],
+    default: []
   },
   reducers: {
     create(state, { payload: { name } }) {
@@ -88,5 +87,5 @@ export default {
         }
       });
     }
-  },
+  }
 };

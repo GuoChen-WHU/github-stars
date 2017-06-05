@@ -17,7 +17,8 @@
     "prop-types": "^15.5.10",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
-    "redux-actions": "^2.0.3"
+    "redux-actions": "^2.0.3",
+    "redux-persist": "^4.8.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",

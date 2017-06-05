@@ -1,10 +1,9 @@
 import dva from 'dva';
+import { persistStore, autoRehydrate } from 'redux-persist';
 import './index.css';
 
-const userState = JSON.parse(localStorage.getItem('github-stars-user')) || {};
-
 const app = dva({
-  initialState: { user: userState }
+  extraEnhancers: [autoRehydrate()]
 });
 
 app.model(require("./models/stars"));
@@ -14,3 +13,7 @@ app.model(require("./models/archive"));
 app.router(require('./router'));
 
 app.start('#root');
+
+persistStore(app._store, {
+  whitelist: ['user', 'archive']
+});
