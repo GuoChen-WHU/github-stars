@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'dva';
 import { bindActionCreators } from 'redux';
 
+import Controls from '../components/Archive/Controls';
 import StarsComponent from '../components/Stars/Stars';
+import RenameModal from '../components/Archive/Modal';
 import * as actions from '../actions';
 
 class Archive extends Component {
@@ -18,15 +20,30 @@ class Archive extends Component {
     const list = this.props.archive.list || [];
     const total = this.props.archive[name].length;
     const page = this.props.archive.page;
+    const { renameArchive, removeArchive, navigate } = this.props.actions;
 
-    return <StarsComponent 
-      list={list} 
-      page={page} 
-      total={total} 
-      actions={{ navigate: this.props.actions.navigate }}
-      editable={false}
-      basePath={`/archive/${name}`}
-    />;
+    return (
+      <div>
+        <Controls 
+          name={name} 
+          remove={removeArchive}
+          navigate={navigate}
+        />
+        <StarsComponent 
+          list={list} 
+          page={page} 
+          total={total} 
+          actions={{ navigate: this.props.actions.navigate }}
+          editable={false}
+          basePath={`/archive/${name}`}
+        />
+        <RenameModal
+          archive={name}
+          rename={renameArchive}
+          navigate={navigate}
+        />
+      </div>
+    ); 
   }
 }
 

@@ -13,6 +13,27 @@ export default {
       if (state.allArchives.indexOf(name) > -1) return state;
       return {...state, allArchives: [...state.allArchives, name], [name]: []};
     },
+    rename(state, { payload: { old, now } }) {
+      const index = state.allArchives.indexOf(old);
+      if (index === -1) return state;
+
+      const nowArchives = state.allArchives.slice();
+      nowArchives.splice(index, 1, now);
+      const nowState =  {...state, allArchives: nowArchives };
+      nowState[now] = nowState[old];
+      delete nowState[old];
+      return nowState;
+    },
+    remove(state, { payload: { name } }) {
+      const index = state.allArchives.indexOf(name);
+      if (index === -1) return state;
+
+      const nowArchives = state.allArchives.slice();
+      nowArchives.splice(index, 1);
+      const nowState =  {...state, allArchives: nowArchives };
+      delete nowState[name];
+      return nowState;
+    },
     edit(state, { payload: { name } }) {
       return {...state, editing: true, repo: name};
     },

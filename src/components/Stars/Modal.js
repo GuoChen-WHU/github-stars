@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, Select } from 'antd';
+import { Modal, Select, message } from 'antd';
 const { Option } = Select;
 import styles from './Modal.css';
 
@@ -17,16 +17,24 @@ class ArchiveModal extends Component {
     archiveSelected: ''
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.props.editing !== nextProps.editing 
+      || this.state.archiveSelected !== nextState.archiveSelected;
+  }
+
   render() {
     const { editing, repo, archives, actions } = this.props;
     const { endArchiveEdit, addToArchive } = actions;
+    const { archiveSelected } = this.state;
+
     return (
       <Modal
         title="Archive"
         visible={editing}
         onOk={() => {
-          addToArchive(repo, this.state.archiveSelected);
+          addToArchive(repo, archiveSelected);
           endArchiveEdit();
+          message.success(`${repo} is added to ${archiveSelected} archive`);
         }}
         onCancel={() => endArchiveEdit()}
         okText="OK"

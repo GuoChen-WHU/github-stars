@@ -14,6 +14,10 @@ export const login = createAction('user/login', (username, password) => ({
 
 export const createArchive = createAction('archive/create', name => ({ name }));
 
+export const renameArchive = createAction('archive/rename', (old, now) => ({ old, now }));
+
+export const removeArchive = createAction('archive/remove', name => ({ name }));
+
 export const startArchiveEdit = createAction('archive/edit', name => ({ name }));
 
 export const endArchiveEdit = createAction('archive/edit/end');
