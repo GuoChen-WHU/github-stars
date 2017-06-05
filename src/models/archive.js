@@ -9,6 +9,10 @@ export default {
     archive2: []
   },
   reducers: {
+    create(state, { payload: { name } }) {
+      if (state.allArchives.indexOf(name) > -1) return state;
+      return {...state, allArchives: [...state.allArchives, name], [name]: []};
+    },
     edit(state, { payload: { name } }) {
       return {...state, editing: true, repo: name};
     },

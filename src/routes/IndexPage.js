@@ -28,15 +28,22 @@ class IndexPage extends Component {
   }
 
   render() {
+    if (!this.props.login) return <p>Redirect to login page...</p>;
     const { login: username, avatar_url } = this.props.userInfo;
     const allArchives = this.props.archives;
+    const { createArchive } = this.props.actions;
     const pathname = this.props.location.pathname;
     const paths = pathname.split('/');
 
     return (
       <Layout>
         <Sider>
-          <Sidebar avatar_url={avatar_url} login={username} archives={allArchives} />
+          <Sidebar 
+            avatar_url={avatar_url} 
+            login={username} 
+            archives={allArchives}
+            createArchive={createArchive} 
+          />
         </Sider>
         <Layout>
           <Header className={styles.header} />

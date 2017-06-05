@@ -3,8 +3,7 @@ import * as githubService from '../services/github';
 export default {
   namespace: 'user',
   state: {
-    login: false,
-    userInfo: {}
+    login: false
   },
   reducers: {
     'login/success' (state, { payload: { username, password, userInfo } }) {

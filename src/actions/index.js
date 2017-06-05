@@ -12,6 +12,8 @@ export const login = createAction('user/login', (username, password) => ({
   password
 }));
 
+export const createArchive = createAction('archive/create', name => ({ name }));
+
 export const startArchiveEdit = createAction('archive/edit', name => ({ name }));
 
 export const endArchiveEdit = createAction('archive/edit/end');
