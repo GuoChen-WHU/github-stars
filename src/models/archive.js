@@ -23,7 +23,7 @@ export default {
       delete nowState[old];
       return nowState;
     },
-    remove(state, { payload: { name } }) {
+    destory(state, { payload: { name } }) {
       const index = state.allArchives.indexOf(name);
       if (index === -1) return state;
 
@@ -43,6 +43,13 @@ export default {
       if (!state[archive]) return {...state, [archive]: [repo]};
       const newArchive = [...state[archive], repo];
       return {...state, [archive]: newArchive}; 
+    },
+    'remove/local'(state, { payload: { repo, archive } }) {
+      const newArchive = state[archive].slice();
+      const index = newArchive.indexOf(repo);
+      if (index === -1) return state;
+      newArchive.splice(index, 1);
+      return {...state, [archive]: newArchive};
     },
     save(state, { payload: { list, page } }) {
       return {...state, list, page};
@@ -67,6 +74,24 @@ export default {
         type: 'save',
         payload: {
           list,
+          page
+        }
+      });
+    },
+    // Need to remove repo from state[archive], and then fetch state.list
+    *remove({ payload: { repo, archive } }, { put, select }) {
+      yield put({
+        type: 'remove/local',
+        payload: {
+          repo,
+          archive
+        }
+      });
+      const page = yield select(state => state.archive.page);
+      yield put({
+        type: 'fetch',
+        payload: {
+          name: archive,
           page
         }
       });

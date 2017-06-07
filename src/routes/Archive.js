@@ -20,22 +20,30 @@ class Archive extends Component {
     const list = this.props.archive.list || [];
     const total = this.props.archive[name].length;
     const page = this.props.archive.page;
-    const { renameArchive, removeArchive, navigate } = this.props.actions;
+    const { renameArchive, destoryArchive, removeFromArchive, navigate } = this.props.actions;
 
     return (
       <div>
         <Controls 
           name={name} 
-          remove={removeArchive}
+          destory={destoryArchive}
           navigate={navigate}
         />
         <StarsComponent 
           list={list} 
           page={page} 
           total={total} 
-          actions={{ navigate: this.props.actions.navigate }}
-          editable={false}
+          navigate={navigate}
           basePath={`/archive/${name}`}
+          buttons={[
+            {
+              type: 'default',
+              icon: 'close',
+              clickHandler: removeFromArchive.bind(null, name),
+              popConfirmTitle: 'Are you sure to remove this repo from archive?',
+              text: 'Remove'
+            }
+          ]}
         />
         <RenameModal
           archive={name}

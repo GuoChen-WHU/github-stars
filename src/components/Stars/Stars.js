@@ -4,7 +4,14 @@ import { Table, Pagination, Icon, Popconfirm, Button } from 'antd';
 import { PAGE_SIZE } from '../../constants';
 import styles from './Stars.css';
 
-const Stars = ({ list: dataSource, page, total, actions, editable, basePath }) => {
+const Stars = ({ 
+  list: dataSource, 
+  page, 
+  total, 
+  navigate, 
+  basePath,
+  buttons
+}) => {
 
   const columns = [
     {
@@ -44,47 +51,47 @@ const Stars = ({ list: dataSource, page, total, actions, editable, basePath }) =
       title: 'Updated at',
       dataIndex: 'updated_at',
       key: 'updated_at'
-    }
-  ];
-
-  if (editable) {
-    columns.push({
+    },
+    {
       title: '',
       dataIndex: 'name',
       key: 'action',
       render: name => (
         <span>
-          <Button 
-            type="primary" 
-            icon="book" 
-            onClick={achiveHandler.bind(null, name)}
-            style={{marginRight: 8}}
-          >
-            Achive
-          </Button>
-          <Popconfirm 
-            title="Confirm to unstar?" 
-            onConfirm={unstarHandler.bind(null, name)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button icon="star">Unstar</Button>
-          </Popconfirm>
+          {buttons.map((button, index) =>
+            button.popConfirmTitle ?
+            <Popconfirm
+              key={index}
+              title={button.popConfirmTitle}
+              onConfirm={() => button.clickHandler(name)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button
+                type={button.type}
+                icon={button.icon}
+                style={{ marginRight: 8 }}
+              >
+                {button.text}
+              </Button>
+            </Popconfirm> :
+            <Button
+              key={index} 
+              type={button.type}
+              icon={button.icon}
+              onClick={() => button.clickHandler(name)}
+              style={{ marginRight: 8 }}
+            >
+              {button.text}
+            </Button>
+          )}
         </span>
       )
-    });
-  }
-
-  const achiveHandler = name => {
-    actions.startArchiveEdit(name);
-  };
-
-  const unstarHandler = name => {
-    actions.unstar(name);
-  };
+    }
+  ];
 
   const onPageChange = page => {
-    actions.navigate({
+    navigate({
       pathname: basePath,
       query: { page }
     });
@@ -114,9 +121,9 @@ Stars.propTypes = {
   list: PropTypes.array,
   page: PropTypes.number,
   total: PropTypes.number,
-  actions: PropTypes.object,
-  editable: PropTypes.bool,
-  basePath: PropTypes.string
+  navigate: PropTypes.func,
+  basePath: PropTypes.string,
+  buttons: PropTypes.object
 };
 
 export default Stars;

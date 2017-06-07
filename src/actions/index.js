@@ -16,13 +16,18 @@ export const createArchive = createAction('archive/create', name => ({ name }));
 
 export const renameArchive = createAction('archive/rename', (old, now) => ({ old, now }));
 
-export const removeArchive = createAction('archive/remove', name => ({ name }));
+export const destoryArchive = createAction('archive/destory', name => ({ name }));
 
 export const startArchiveEdit = createAction('archive/edit', name => ({ name }));
 
 export const endArchiveEdit = createAction('archive/edit/end');
 
 export const addToArchive = createAction('archive/add', (repo, archive) => ({
+  repo,
+  archive
+}));
+
+export const removeFromArchive = createAction('archive/remove', (archive, repo) => ({
   repo,
   archive
 }));

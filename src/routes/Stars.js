@@ -22,9 +22,23 @@ class Stars extends Component {
       <div>
         <StarsComponent 
           {...this.props.stars}
-          actions={{navigate, unstar, startArchiveEdit}}
-          editable={true}
+          navigate={navigate}
           basePath={'/stars'}
+          buttons={[
+            {
+              type: 'primary',
+              icon: 'book',
+              clickHandler: startArchiveEdit,
+              text: 'Archive'
+            },
+            {
+              type: 'default',
+              icon: 'star',
+              clickHandler: unstar,
+              text: 'Unstar',
+              popConfirmTitle: 'Confirm to unstar?'
+            }
+          ]}
         />
         <ArchiveModal 
           editing={editing} 

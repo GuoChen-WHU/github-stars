@@ -3,7 +3,7 @@ import { Button, Popconfirm, message } from 'antd';
 import EventEmitter from '../../utils/EventEmitter';
 import styles from './Controls.css';
 
-const Controls = ({ name, remove, navigate }) => {
+const Controls = ({ name, destory, navigate }) => {
   return (
     <div>
       <Button 
@@ -17,8 +17,8 @@ const Controls = ({ name, remove, navigate }) => {
         title="Are you sure delete this archive?"
         onConfirm={() => {
           navigate({ pathname: '/stars' });
-          remove(name);
-          message.success(`Archive ${name} is removed.`);
+          destory(name);
+          message.success(`Archive ${name} is destoryed.`);
         }}
         okText="yes"
         cancelText="no"
